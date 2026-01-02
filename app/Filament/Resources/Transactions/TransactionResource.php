@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Transactions;
 
 use App\Filament\Resources\Transactions\Pages\ManageTransactions;
+use App\Filament\Widgets\TotalCard;
 use App\Models\Transaction;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -19,6 +20,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -49,10 +51,6 @@ class TransactionResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0),
-                TextInput::make('saldo')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
             ]);
     }
 
@@ -65,13 +63,13 @@ class TransactionResource extends Resource
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('description')
+                    ->sortable(),
                 TextColumn::make('debit')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Sum::make()),
                 TextColumn::make('credit')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('saldo')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('deleted_at')
@@ -118,5 +116,12 @@ class TransactionResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            TotalCard::class,
+        ];
     }
 }

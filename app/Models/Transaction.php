@@ -17,8 +17,14 @@ class Transaction extends Model
         'description',
         'debit',
         'credit',
-        'saldo',
     ];
 
-    
+    public function getSaldo($startDate, $endDate)
+    {
+        if ($startDate && $endDate) {
+            return $this->whereBetween('date', [$startDate, $endDate])->sum('debit') - $this->whereBetween('date', [$startDate, $endDate])->sum('credit');
+        }
+
+        return $this->sum('debit') - $this->sum('credit');
+    }
 }

@@ -22,7 +22,6 @@ class TransactionFactory extends Factory
             'description' => $this->faker->sentence(),
             'debit' => $this->faker->randomFloat(2, 0, 1000),
             'credit' => $this->faker->randomFloat(2, 0, 1000),
-            'saldo' => $this->faker->randomFloat(2, 0, 10000),
         ];
     }
 }
